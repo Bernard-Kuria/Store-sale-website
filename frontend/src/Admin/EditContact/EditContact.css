@@ -1,0 +1,32 @@
+.contact-edit {
+  width: 400px;
+  height: auto;
+  background-color: rgb(95, 95, 95);
+  border-radius: 20px;
+  padding: 40px;
+  margin: 0 0 5px 0;
+  margin-bottom: 30px;
+}
+
+.edit-contact-heading {
+  margin-bottom: 20px;
+}
+
+.new-phone,
+.new-email,
+.set {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background-color: rgb(216, 216, 216);
+  width: 80%;
+  height: 50px;
+}
+
+.set {
+  width: 200px;
+  display: block;
+}
+
+.set:hover {
+  background-color: rgb(97, 97, 97);
+}
