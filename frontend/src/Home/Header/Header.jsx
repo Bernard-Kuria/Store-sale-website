@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import logo from "/logo.jpg";
+import logo from "../../assets/logo.jpg";
 
 export default function Header({ setDisplayScroll, scrollContact }) {
   const [admin, setAdmin] = useState(false);
@@ -17,7 +17,6 @@ export default function Header({ setDisplayScroll, scrollContact }) {
       try {
         const response = await fetch("/admin/password");
         if (response.ok) {
-          console.log("Password endpoint reachable."); // Debug
           setPasswordFetched(true); // Set fetched status
         } else {
           console.warn("Failed to connect to password endpoint.");

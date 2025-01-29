@@ -25,7 +25,3 @@ export default function App() {
     </Router>
   );
 }
-
-App.propTypes = {
-  store: PropTypes.array.isRequired, // store is an array
-};
