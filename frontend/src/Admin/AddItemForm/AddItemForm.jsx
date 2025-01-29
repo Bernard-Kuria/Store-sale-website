@@ -1,10 +1,10 @@
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-
 import "./styling/AddItemForm.css";
 
-export default function AddItemForm({ store, setRefresh }) {
+export default function AddItemForm({ setRefresh }) {
   // Add setRefresh prop
   const [formData, setFormData] = useState({
     productName: "",
@@ -102,6 +102,10 @@ export default function AddItemForm({ store, setRefresh }) {
   );
 }
 
+AddItemForm.propTypes = {
+  setRefresh: PropTypes.func.isRequired,
+};
+
 function AddItem({ formData, handleChange, handleAddItem }) {
   return (
     <form onSubmit={handleAddItem}>
@@ -146,6 +150,17 @@ function AddItem({ formData, handleChange, handleAddItem }) {
   );
 }
 
+AddItem.propTypes = {
+  formData: PropTypes.shape({
+    productName: PropTypes.string.isRequired,
+    price: PropTypes.string.isRequired,
+    stock: PropTypes.string.isRequired,
+    image: PropTypes.object, // File object
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleAddItem: PropTypes.func.isRequired,
+};
+
 function RemoveItem({ formData, handleChange, handleRemoveItem }) {
   return (
     <form onSubmit={handleRemoveItem}>
@@ -163,3 +178,11 @@ function RemoveItem({ formData, handleChange, handleRemoveItem }) {
     </form>
   );
 }
+
+RemoveItem.propTypes = {
+  formData: PropTypes.shape({
+    productName: PropTypes.string.isRequired,
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleRemoveItem: PropTypes.func.isRequired,
+};

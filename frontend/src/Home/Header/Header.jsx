@@ -1,9 +1,9 @@
+import PropTypes from "prop-types"; // Import PropTypes for validation
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import logo from "../../assets/logo.jpg";
-import backgroundImage from "../../assets/background-image.jpg";
+import logo from "/logo.jpg";
 
 export default function Header({ setDisplayScroll, scrollContact }) {
   const [admin, setAdmin] = useState(false);
@@ -93,6 +93,11 @@ export default function Header({ setDisplayScroll, scrollContact }) {
   );
 }
 
+Header.propTypes = {
+  setDisplayScroll: PropTypes.func.isRequired,
+  scrollContact: PropTypes.func.isRequired,
+};
+
 function PasswordPopUp({
   checkPassword,
   inputPassword,
@@ -130,3 +135,10 @@ function PasswordPopUp({
     </>
   );
 }
+
+PasswordPopUp.propTypes = {
+  checkPassword: PropTypes.func.isRequired,
+  inputPassword: PropTypes.string.isRequired,
+  setInputPassword: PropTypes.func.isRequired,
+  setAdmin: PropTypes.func.isRequired,
+};

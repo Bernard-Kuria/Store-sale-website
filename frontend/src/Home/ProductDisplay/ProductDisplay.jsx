@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 export default function ProductDisplay({ productName, price, stock, image }) {
   return (
     <div className={`product ${stock <= 0 ? "soldOut" : ""}`}>
@@ -18,3 +20,10 @@ export default function ProductDisplay({ productName, price, stock, image }) {
     </div>
   );
 }
+
+ProductDisplay.propTypes = {
+  productName: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  stock: PropTypes.number.isRequired,
+  image: PropTypes.string.isRequired,
+};

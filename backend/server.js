@@ -5,6 +5,7 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const { Sequelize, DataTypes } = require("sequelize");
+const compression = require("compression");
 
 // Initialize Express app
 const app = express();
@@ -13,6 +14,12 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(compression());
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 
 // Database connection
 const sequelize = new Sequelize("shoestore", "postgres", "1234", {
