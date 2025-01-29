@@ -8,6 +8,10 @@ export default function Home({ store }) {
   const [contactScroll, setContactScroll] = useState(false);
 
   useEffect(() => {
+    document.title = "KICKS N SOLES";
+  }, []);
+
+  useEffect(() => {
     if (displayScroll) {
       const target = document.querySelector(".product-display");
       if (target) {
