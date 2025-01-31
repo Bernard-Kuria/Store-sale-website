@@ -22,19 +22,11 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection
-const { Sequelize } = require("sequelize");
-
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const sequelize = new Sequelize("shoestore", "postgres", "1234", {
+  host: "localhost",
   dialect: "postgres",
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false, // Only needed for some providers
-    },
-  },
+  port: 5432, // Default PostgreSQL port
 });
-
-module.exports = sequelize;
 
 // Test database connection
 sequelize
