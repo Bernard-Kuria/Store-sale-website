@@ -6,6 +6,7 @@ const multer = require("multer");
 const path = require("path");
 const { Sequelize, DataTypes } = require("sequelize");
 const compression = require("compression");
+require("dotenv").config();
 
 // Initialize Express app
 const app = express();
@@ -22,10 +23,14 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection
-const sequelize = new Sequelize("shoestore", "postgres", "1234", {
-  host: "localhost",
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
-  port: 5432, // Default PostgreSQL port
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 });
 
 // Test database connection
@@ -153,19 +158,16 @@ app.delete("/store/:productName", async (req, res) => {
   const { productName } = req.params;
 
   try {
-    // Fetch the item to get the image path
     const item = await Store.findOne({ where: { productName } });
 
     if (!item) {
       return res.status(404).send("Shoe not found.");
     }
 
-    // Delete the item from the database
     await Store.destroy({ where: { productName } });
 
-    // Check if the item has an image and delete the image file
     if (item.image) {
-      const imagePath = path.join(__dirname, item.image); // Get the full path to the image file
+      const imagePath = path.join(__dirname, item.image);
       fs.unlink(imagePath, (err) => {
         if (err) {
           console.error("Error deleting image file:", err);
@@ -192,38 +194,6 @@ app.get("/contact", async (req, res) => {
   } catch (error) {
     console.error("Error fetching contact details:", error);
     res.status(500).json({ error: "Failed to fetch contact details" });
-  }
-});
-
-// Update contact details
-app.put("/contact", async (req, res) => {
-  const { phone, email } = req.body;
-  try {
-    let contact = await ContactInfo.findOne();
-    if (!contact) {
-      contact = await ContactInfo.create({ phone, email });
-    } else {
-      await contact.update({ phone, email });
-    }
-    res.status(200).json({ message: "Contact details updated successfully." });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update contact details." });
-  }
-});
-
-// Update admin password
-app.put("/admin/password", async (req, res) => {
-  const { currentPassword, newPassword } = req.body;
-  try {
-    const admin = await Admin.findOne({ where: { username: "admin" } });
-    if (!admin) return res.status(404).json({ error: "Admin not found." });
-    if (admin.password !== currentPassword) {
-      return res.status(401).json({ error: "Current password is incorrect." });
-    }
-    await admin.update({ password: newPassword });
-    res.status(200).json({ message: "Password updated successfully." });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update password." });
   }
 });
 
