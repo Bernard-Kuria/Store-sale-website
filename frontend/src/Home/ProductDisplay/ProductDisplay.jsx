@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 
 export default function ProductDisplay({ productName, price, stock, image }) {
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000"; // Get the API URL
+
   return (
     <div className={`product ${stock <= 0 ? "soldOut" : ""}`}>
       <div className="image-container">
         <img
           className="product-image"
-          src={`http://localhost:5000${image}`}
+          src={`${apiUrl}${image}`} // Use dynamic API URL
           alt="Image"
         />
       </div>

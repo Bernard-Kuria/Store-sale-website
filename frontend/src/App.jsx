@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PropTypes from "prop-types";
 import "./App.css";
 import Admin from "./Admin/Admin.jsx";
 import Home from "./Home/Home.jsx";
@@ -10,7 +9,9 @@ export default function App() {
   const [store, setStore] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/store").then((response) => {
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+    axios.get(`${apiUrl}/store`).then((response) => {
       setStore(response.data);
     });
   }, []);

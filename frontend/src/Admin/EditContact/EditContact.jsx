@@ -6,9 +6,11 @@ export default function EditContact() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const updateContact = async () => {
     try {
-      await axios.put("http://localhost:5000/contact", { phone, email });
+      await axios.put(`${apiUrl}/contact`, { phone, email }); // Use dynamic API URL
       alert("Contact details updated successfully!");
     } catch (error) {
       alert("Failed to update contact details.");

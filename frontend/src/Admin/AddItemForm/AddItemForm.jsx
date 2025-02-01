@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import "./styling/AddItemForm.css";
+import "./AddItemForm.css";
 
 export default function AddItemForm({ setRefresh }) {
   // Add setRefresh prop
@@ -13,6 +13,7 @@ export default function AddItemForm({ setRefresh }) {
     image: null, // Change to store the file object
   });
   const [buttonState, setButtonState] = useState(true);
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -33,7 +34,7 @@ export default function AddItemForm({ setRefresh }) {
       if (formData.image) formDataObj.append("image", formData.image);
 
       const response = await axios.post(
-        "http://localhost:5000/store",
+        `${apiUrl}/store`, // Use dynamic API URL
         formDataObj,
         {
           headers: {
@@ -59,7 +60,7 @@ export default function AddItemForm({ setRefresh }) {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/store/${formData.productName}`
+        `${apiUrl}/store/${formData.productName}` // Use dynamic API URL
       );
       console.log("Shoe removed:", response.data);
       alert("Shoe removed successfully!");

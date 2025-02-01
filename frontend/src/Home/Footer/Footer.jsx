@@ -3,11 +3,13 @@ import axios from "axios";
 
 export default function Footer() {
   const [contact, setContact] = useState({ phone: "", email: "" });
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   // Fetch contact details from the database
   useEffect(() => {
     const fetchContactDetails = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/contact");
+        const response = await axios.get(`${apiUrl}/contact`); // Use dynamic API URL
         if (response.data) {
           setContact({
             phone: response.data.phone,
@@ -20,7 +22,7 @@ export default function Footer() {
     };
 
     fetchContactDetails();
-  }, []);
+  }, [apiUrl]);
 
   return (
     <>

@@ -15,7 +15,8 @@ export default function Header({ setDisplayScroll, scrollContact }) {
   useEffect(() => {
     const fetchPassword = async () => {
       try {
-        const response = await fetch("/admin/password");
+        const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+        const response = await fetch(`${apiUrl}/admin/password`);
         if (response.ok) {
           setPasswordFetched(true); // Set fetched status
         } else {
@@ -39,7 +40,8 @@ export default function Header({ setDisplayScroll, scrollContact }) {
     }
 
     try {
-      const response = await axios.put("http://localhost:5000/admin/password", {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const response = await axios.put(`${apiUrl}/admin/password`, {
         currentPassword: inputPassword,
       });
 

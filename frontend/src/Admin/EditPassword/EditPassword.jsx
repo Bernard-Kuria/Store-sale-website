@@ -6,12 +6,14 @@ export default function EditPassword() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const updatePassword = async () => {
     try {
-      await axios.put("http://localhost:5000/admin/password", {
+      await axios.put(`${apiUrl}/admin/password`, {
         currentPassword,
         newPassword,
-      });
+      }); // Use dynamic API URL
       alert("Password updated successfully!");
     } catch (error) {
       if (error.response && error.response.data.error) {

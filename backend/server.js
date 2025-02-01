@@ -8,6 +8,8 @@ const { Sequelize, DataTypes } = require("sequelize");
 const compression = require("compression");
 require("dotenv").config();
 
+console.log("Database URL:", process.env.DATABASE_URL);
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,14 +25,15 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const databaseUrl =
+  process.env.DATABASE_URL ||
+  "postgres://shoestore:1234@localhost:5432/shoestore";
+
+const sequelize = new Sequelize(databaseUrl, {
   dialect: "postgres",
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
+  dialectOptions: process.env.DATABASE_URL
+    ? { ssl: { require: true, rejectUnauthorized: false } } // Enable SSL only for Railway
+    : {}, // No SSL for local PostgreSQL
 });
 
 // Test database connection
@@ -202,5 +205,5 @@ app.use("/uploads", express.static("uploads"));
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
