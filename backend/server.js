@@ -25,9 +25,7 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection
-const databaseUrl =
-  process.env.DATABASE_URL ||
-  "postgres://shoestore:1234@localhost:5432/shoestore";
+const databaseUrl = process.env.DATABASE_URL;
 
 const sequelize = new Sequelize(databaseUrl, {
   dialect: "postgres",

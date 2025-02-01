@@ -13,7 +13,7 @@ export default function AddItemForm({ setRefresh }) {
     image: null, // Change to store the file object
   });
   const [buttonState, setButtonState] = useState(true);
-  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

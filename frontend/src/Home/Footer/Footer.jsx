@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default function Footer() {
   const [contact, setContact] = useState({ phone: "", email: "" });
-  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // Fetch contact details from the database
   useEffect(() => {

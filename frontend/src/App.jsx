@@ -9,7 +9,7 @@ export default function App() {
   const [store, setStore] = useState([]);
 
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     axios.get(`${apiUrl}/store`).then((response) => {
       setStore(response.data);

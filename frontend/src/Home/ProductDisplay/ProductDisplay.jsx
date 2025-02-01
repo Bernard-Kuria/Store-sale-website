@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 export default function ProductDisplay({ productName, price, stock, image }) {
-  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000"; // Get the API URL
+  const apiUrl = import.meta.env.VITE_API_URL; // Get the API URL
 
   return (
     <div className={`product ${stock <= 0 ? "soldOut" : ""}`}>

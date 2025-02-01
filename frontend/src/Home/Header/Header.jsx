@@ -40,7 +40,7 @@ export default function Header({ setDisplayScroll, scrollContact }) {
     }
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await axios.put(`${apiUrl}/admin/password`, {
         currentPassword: inputPassword,
       });
