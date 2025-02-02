@@ -17,6 +17,8 @@ export default function AddItemForm({ setRefresh }) {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+    console.log("Image Data:", formData.image);
+
     setFormData({
       ...formData,
       [name]: name === "image" ? files[0] : value, // Store file object for image
@@ -25,30 +27,30 @@ export default function AddItemForm({ setRefresh }) {
 
   const handleAddItem = async (e) => {
     e.preventDefault();
+    console.log("Image Data:", formData.image);
 
     try {
       const formDataObj = new FormData();
       formDataObj.append("productName", formData.productName);
       formDataObj.append("price", formData.price);
       formDataObj.append("stock", formData.stock);
-      if (formData.image) formDataObj.append("image", formData.image);
 
-      const response = await axios.post(
-        `${apiUrl}/store`, // Use dynamic API URL
-        formDataObj,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      if (formData.image && formData.image instanceof File) {
+        formDataObj.append("image", formData.image);
+      } else {
+        console.warn("No valid image selected");
+      }
+
+      console.log("Sending Data:", formDataObj);
+      console.log("API URL:", apiUrl);
+
+      const response = await axios.post(`${apiUrl}/store`, formDataObj);
+
       console.log("Item added:", response.data);
       alert("Item added successfully!");
-      window.location.reload(); // Refresh the page
-      // Delay refresh after successful item addition
-      setTimeout(() => {
-        setRefresh((prev) => !prev); // Toggle refresh state after a delay
-      }, 500); // Wait for a moment to allow the UI to settle
+
+      setFormData({ productName: "", price: "", stock: "", image: null });
+      setRefresh((prev) => !prev); // Trigger re-render
     } catch (error) {
       console.error("Error adding item:", error);
       alert("Failed to add item. Please try again.");

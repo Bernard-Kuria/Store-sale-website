@@ -20,8 +20,10 @@ app.use(bodyParser.json());
 app.use(compression());
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
+  console.error("Internal Server Error:", err);
+  res
+    .status(500)
+    .json({ error: "Internal Server Error", details: err.message });
 });
 
 // Database connection
@@ -170,9 +172,10 @@ app.get("/store", async (req, res) => {
   }
 });
 
-// Add a new shoe
 app.post("/store", upload.single("image"), async (req, res) => {
-  console.log("Received file:", req.file); // Add this for debugging
+  console.log("Received body:", req.body);
+  console.log("Received file:", req.file);
+
   const { productName, price, stock } = req.body;
   const image = req.file ? req.file.filename : null;
 
