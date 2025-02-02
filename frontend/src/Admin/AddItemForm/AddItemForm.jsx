@@ -103,9 +103,9 @@ export default function AddItemForm({ setRefresh }) {
   );
 }
 
-AddItemForm.propTypes = {
-  setRefresh: PropTypes.func.isRequired,
-};
+// AddItemForm.propTypes = {
+//   setRefresh: PropTypes.func.isRequired,
+// };
 
 function AddItem({ formData, handleChange, handleAddItem }) {
   return (

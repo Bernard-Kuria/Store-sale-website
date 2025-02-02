@@ -10,10 +10,11 @@ export default function EditPassword() {
 
   const updatePassword = async () => {
     try {
-      await axios.put(`${apiUrl}/admin/password`, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}/admin/password`, {
         currentPassword,
-        newPassword,
-      }); // Use dynamic API URL
+        newPassword, // Send both current and new password for updating
+      });
       alert("Password updated successfully!");
     } catch (error) {
       if (error.response && error.response.data.error) {

@@ -110,41 +110,55 @@ const upload = multer({ storage });
 
 // Routes
 
-// Fetch Admin Password
-app.get("/admin/password", async (req, res) => {
-  try {
-    const admin = await Admin.findOne({ where: { username: "admin" } });
-    if (!admin) {
-      return res.status(404).json({ message: "Admin not found" });
+app
+  .route("/admin/password")
+  .get(async (req, res) => {
+    try {
+      const admin = await Admin.findOne({ where: { username: "admin" } });
+      if (!admin) {
+        return res.status(404).json({ message: "Admin not found" });
+      }
+      res.status(200).json({ message: "Password fetched successfully" });
+    } catch (error) {
+      console.error("Error fetching admin password:", error);
+      res.status(500).json({ error: "Failed to fetch password" });
     }
-    res.json({ password: admin.password });
-  } catch (error) {
-    console.error("Error fetching admin password:", error);
-    res.status(500).json({ error: "Failed to fetch password" });
-  }
-});
+  })
+  .post(async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
 
-// Validate Admin Password
-app.post("/admin/password", async (req, res) => {
-  const { currentPassword } = req.body;
+    try {
+      const admin = await Admin.findOne({ where: { username: "admin" } });
+      if (!admin) {
+        return res.status(404).json({ message: "Admin not found" });
+      }
 
-  try {
-    const admin = await Admin.findOne({ where: { username: "admin" } });
-    if (!admin) {
-      return res.status(404).json({ message: "Admin not found" });
+      if (currentPassword && newPassword) {
+        // Update password logic
+        if (currentPassword === admin.password) {
+          admin.password = newPassword;
+          await admin.save();
+          return res
+            .status(200)
+            .json({ message: "Password updated successfully" });
+        } else {
+          return res
+            .status(401)
+            .json({ message: "Incorrect current password" });
+        }
+      } else if (currentPassword) {
+        // Check password logic
+        if (currentPassword === admin.password) {
+          return res.status(200).json({ message: "Password matched" });
+        } else {
+          return res.status(401).json({ message: "Incorrect password" });
+        }
+      }
+    } catch (error) {
+      console.error("Error handling password:", error);
+      res.status(500).json({ error: "Failed to handle password request" });
     }
-
-    // Compare the input password with the stored password
-    if (currentPassword === admin.password) {
-      return res.status(200).json({ message: "Password matched" });
-    } else {
-      return res.status(401).json({ message: "Incorrect password" });
-    }
-  } catch (error) {
-    console.error("Error validating admin password:", error);
-    res.status(500).json({ error: "Failed to validate password" });
-  }
-});
+  });
 
 // Get all shoes
 app.get("/store", async (req, res) => {
