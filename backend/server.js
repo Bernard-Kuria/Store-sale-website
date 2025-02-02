@@ -124,6 +124,28 @@ app.get("/admin/password", async (req, res) => {
   }
 });
 
+// Validate Admin Password
+app.post("/admin/password", async (req, res) => {
+  const { currentPassword } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ where: { username: "admin" } });
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    // Compare the input password with the stored password
+    if (currentPassword === admin.password) {
+      return res.status(200).json({ message: "Password matched" });
+    } else {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+  } catch (error) {
+    console.error("Error validating admin password:", error);
+    res.status(500).json({ error: "Failed to validate password" });
+  }
+});
+
 // Get all shoes
 app.get("/store", async (req, res) => {
   try {
