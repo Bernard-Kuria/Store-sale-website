@@ -172,6 +172,7 @@ app.get("/store", async (req, res) => {
 
 // Add a new shoe
 app.post("/store", upload.single("image"), async (req, res) => {
+  console.log("Received file:", req.file); // Add this for debugging
   const { productName, price, stock } = req.body;
   const image = req.file ? req.file.filename : null;
 
@@ -184,6 +185,7 @@ app.post("/store", upload.single("image"), async (req, res) => {
     });
     res.status(201).json(newStore);
   } catch (error) {
+    console.error("Error in adding store item:", error);
     res
       .status(500)
       .json({ error: "Failed to create store item", details: error.message });
