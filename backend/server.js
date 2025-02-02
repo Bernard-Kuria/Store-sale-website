@@ -184,7 +184,9 @@ app.post("/store", upload.single("image"), async (req, res) => {
     });
     res.status(201).json(newStore);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create store item" });
+    res
+      .status(500)
+      .json({ error: "Failed to create store item", details: error.message });
   }
 });
 
