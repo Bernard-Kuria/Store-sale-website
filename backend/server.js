@@ -172,10 +172,9 @@ app.get("/store", async (req, res) => {
   }
 });
 
+// Add a new shoe
 app.post("/store", upload.single("image"), async (req, res) => {
-  console.log("Received body:", req.body);
-  console.log("Received file:", req.file);
-
+  console.log("Received file:", req.file); // Add this for debugging
   const { productName, price, stock } = req.body;
   const image = req.file ? req.file.filename : null;
 
