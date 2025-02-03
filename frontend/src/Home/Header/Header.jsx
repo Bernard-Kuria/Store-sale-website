@@ -8,7 +8,7 @@ import logo from "../../assets/logo.jpg";
 export default function Header({ setDisplayScroll, scrollContact }) {
   const [admin, setAdmin] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
-  const [passwordFetched, setPasswordFetched] = useState(false); // Track if the password has been fetched
+  const [passwordFetched, setPasswordFetched] = useState(false);
   const navigate = useNavigate();
 
   // Fetch password from the database

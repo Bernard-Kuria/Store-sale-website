@@ -48,7 +48,7 @@ export default function AddItemForm({ setRefresh }) {
 
       console.log("Item added:", response.data);
       alert("Item added successfully!");
-
+      window.location.reload(); // Refresh the page
       setFormData({ productName: "", price: "", stock: "", image: null });
       setRefresh((prev) => !prev); // Trigger re-render
     } catch (error) {
