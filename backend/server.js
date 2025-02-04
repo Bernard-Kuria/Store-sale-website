@@ -221,8 +221,6 @@ app.post("/store", upload.single("image"), async (req, res) => {
 });
 
 // Delete a shoe by productName
-const fs = require("fs");
-
 app.delete("/store/:productName", async (req, res) => {
   const { productName } = req.params;
 
