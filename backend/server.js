@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const { Sequelize, DataTypes } = require("sequelize");
@@ -20,9 +21,7 @@ app.use(bodyParser.json());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Serve static files from "uploads" directory
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
@@ -109,13 +108,24 @@ sequelize
 
 // File upload setup
 const storage = multer.diskStorage({
-  destination: "./uploads/",
+  destination: (req, file, cb) => {
+    const uploadPath = "uploads/";
+
+    // Create folder if it doesn’t exist
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    cb(null, uploadPath);
+  },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
+
+module.exports = upload;
 
 // Routes
 
