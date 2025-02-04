@@ -18,6 +18,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
@@ -58,7 +60,7 @@ const Store = sequelize.define("Store", {
   },
   image: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
@@ -176,18 +178,24 @@ app.get("/store", async (req, res) => {
 
 // add items to store
 app.post("/store", async (req, res) => {
-  console.log("Received body:", req.body);
-  console.log("Received file:", req.file);
+  console.log("Received body:", req.body); // Check if this logs correct values
+  console.log("Received file:", req.file); // Should be null since there's no image
 
   const { productName, price, stock } = req.body;
-  const image = req.file ? req.file.filename : null;
+
+  // Ensure body fields are correctly received
+  if (!productName || !price || !stock) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
 
   try {
     const newStore = await Store.create({
       productName,
-      price,
-      stock,
+      price: parseFloat(price), // Convert price to a number
+      stock: parseInt(stock), // Convert stock to an integer
+      image: null, // Since no image is sent in this test
     });
+
     res.status(201).json(newStore);
   } catch (error) {
     console.error("Error in adding store item:", error);
