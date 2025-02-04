@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
