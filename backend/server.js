@@ -107,8 +107,10 @@ sequelize
 
 // File upload setup
 const storage = multer.diskStorage({
-  destination: "./uploads/",
-  filename: (req, file, cb) => {
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Ensure this matches your intended storage location
+  },
+  filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
