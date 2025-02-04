@@ -162,7 +162,7 @@ app
     }
   });
 
-// Get all shoes
+// get store items
 app.get("/store", async (req, res) => {
   try {
     const items = await Store.findAll();
@@ -172,7 +172,10 @@ app.get("/store", async (req, res) => {
   }
 });
 
-app.post("/store", upload.single("image"), async (req, res) => {
+// upload.single("image")
+
+// add items to store
+app.post("/store", async (req, res) => {
   console.log("Received body:", req.body);
   console.log("Received file:", req.file);
 
@@ -184,7 +187,6 @@ app.post("/store", upload.single("image"), async (req, res) => {
       productName,
       price,
       stock,
-      image: image ? `/uploads/${image}` : null,
     });
     res.status(201).json(newStore);
   } catch (error) {
@@ -195,7 +197,7 @@ app.post("/store", upload.single("image"), async (req, res) => {
   }
 });
 
-// Delete a shoe by productName
+// Delete an item by productName
 const fs = require("fs");
 
 app.delete("/store/:productName", async (req, res) => {
