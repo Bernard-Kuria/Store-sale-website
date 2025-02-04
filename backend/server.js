@@ -18,6 +18,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
@@ -58,7 +60,7 @@ const Store = sequelize.define("Store", {
   },
   image: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
@@ -104,11 +106,13 @@ sequelize
 
 // File upload setup
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) =>
-    cb(null, Date.now() + path.extname(file.originalname)),
+  destination: "./uploads/",
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
-const upload = multer({ storage });
+
+const upload = multer({ storage: storage });
 
 // Routes
 
@@ -174,22 +178,29 @@ app.get("/store", async (req, res) => {
 
 // Add items to the store
 app.post("/store", upload.single("image"), async (req, res) => {
-  console.log("Received body:", req.body);
-  console.log("Received file:", req.file);
-
-  const { productName, price, stock } = req.body;
-  const image = req.file ? req.file.filename : null;
+  console.log("Received Headers:", req.headers);
+  console.log("Received Body:", req.body);
+  console.log("Received File:", req.file);
 
   try {
+    const { productName, price, stock } = req.body;
+    const image = req.file ? req.file.filename : null; // ✅ Fix missing image
+
+    // 🛑 Check for missing fields
+    if (!productName || !price || !stock) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
     const newStore = await Store.create({
       productName,
       price,
       stock,
-      image: image ? `/uploads/${image}` : null,
+      image, // ✅ Ensure image is passed
     });
+
     res.status(201).json(newStore);
   } catch (error) {
-    console.error("Error in adding store item:", error);
+    console.error("❌ Error in /store:", error);
     res
       .status(500)
       .json({ error: "Failed to create store item", details: error.message });
