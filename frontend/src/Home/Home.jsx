@@ -64,7 +64,7 @@ export default function Home({ store }) {
 Home.propTypes = {
   store: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired, // Assuming each product has a unique ID
+      id: PropTypes.number.isRequired, // Assuming each product has a unique ID
       productName: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
       stock: PropTypes.number.isRequired,
