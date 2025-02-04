@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
@@ -111,7 +111,7 @@ const storage = multer.diskStorage({
     cb(null, "uploads/"); // Ensure this matches your intended storage location
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
