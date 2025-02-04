@@ -20,7 +20,9 @@ app.use(bodyParser.json());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Serve static files from "uploads" directory
+app.use("/uploads", express.static("uploads"));
 
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
@@ -107,17 +109,13 @@ sequelize
 
 // File upload setup
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Ensure this matches your intended storage location
-  },
-  filename: function (req, file, cb) {
+  destination: "./uploads/",
+  filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
-
-module.exports = upload;
 
 // Routes
 
