@@ -18,8 +18,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(compression());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
@@ -60,7 +58,7 @@ const Store = sequelize.define("Store", {
   },
   image: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
 });
 
@@ -164,7 +162,7 @@ app
     }
   });
 
-// get store items
+// Get all items from the store
 app.get("/store", async (req, res) => {
   try {
     const items = await Store.findAll();
@@ -174,28 +172,21 @@ app.get("/store", async (req, res) => {
   }
 });
 
-// upload.single("image")
-
-// add items to store
-app.post("/store", async (req, res) => {
-  console.log("Received body:", req.body); // Check if this logs correct values
-  console.log("Received file:", req.file); // Should be null since there's no image
+// Add items to the store
+app.post("/store", upload.single("image"), async (req, res) => {
+  console.log("Received body:", req.body);
+  console.log("Received file:", req.file);
 
   const { productName, price, stock } = req.body;
-
-  // Ensure body fields are correctly received
-  if (!productName || !price || !stock) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
+  const image = req.file ? req.file.filename : null;
 
   try {
     const newStore = await Store.create({
       productName,
-      price: parseFloat(price), // Convert price to a number
-      stock: parseInt(stock), // Convert stock to an integer
-      image: null, // Since no image is sent in this test
+      price,
+      stock,
+      image: image ? `/uploads/${image}` : null,
     });
-
     res.status(201).json(newStore);
   } catch (error) {
     console.error("Error in adding store item:", error);
@@ -205,7 +196,7 @@ app.post("/store", async (req, res) => {
   }
 });
 
-// Delete an item by productName
+// Delete a shoe by productName
 const fs = require("fs");
 
 app.delete("/store/:productName", async (req, res) => {
