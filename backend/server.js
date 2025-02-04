@@ -241,26 +241,26 @@ app.get("/contact", async (req, res) => {
   }
 });
 
-// app.put("/contact", async (req, res) => {
-//   const { phone, email } = req.body;
+app.put("/contact", async (req, res) => {
+  const { phone, email } = req.body;
 
-//   try {
-//     let contact = await ContactInfo.findOne();
+  try {
+    let contact = await ContactInfo.findOne();
 
-//     if (!contact) {
-//       return res.status(404).json({ message: "Contact details not found" });
-//     }
+    if (!contact) {
+      return res.status(404).json({ message: "Contact details not found" });
+    }
 
-//     contact.phone = phone;
-//     contact.email = email;
-//     await contact.save();
+    contact.phone = phone;
+    contact.email = email;
+    await contact.save();
 
-//     res.status(200).json({ message: "Contact details updated successfully" });
-//   } catch (error) {
-//     console.error("Error updating contact details:", error);
-//     res.status(500).json({ error: "Failed to update contact details" });
-//   }
-// });
+    res.status(200).json({ message: "Contact details updated successfully" });
+  } catch (error) {
+    console.error("Error updating contact details:", error);
+    res.status(500).json({ error: "Failed to update contact details" });
+  }
+});
 
 // Serve static files from "uploads" directory
 app.use("/uploads", express.static("uploads"));
