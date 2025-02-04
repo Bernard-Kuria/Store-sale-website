@@ -109,10 +109,11 @@ sequelize
 // File upload setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = "uploads/";
+    const uploadPath = path.join(__dirname, "uploads");
 
     // Create folder if it doesn’t exist
     if (!fs.existsSync(uploadPath)) {
+      console.log("Creating uploads folder...");
       fs.mkdirSync(uploadPath, { recursive: true });
     }
 
