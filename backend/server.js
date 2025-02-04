@@ -195,7 +195,7 @@ app.post("/store", upload.single("image"), async (req, res) => {
       productName,
       price,
       stock,
-      image, // ✅ Ensure image is passed
+      image: image ? `/uploads/${image}` : null,
     });
 
     res.status(201).json(newStore);
