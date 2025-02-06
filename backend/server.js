@@ -192,32 +192,21 @@ app.get("/store", async (req, res) => {
 
 // Add items to the store
 app.post("/store", upload.single("image"), async (req, res) => {
-  console.log("Received Headers:", req.headers);
-  console.log("Received Body:", req.body);
-  console.log("Received File:", req.file);
-
   try {
     const { productName, price, stock } = req.body;
-    const image = req.file ? req.file.filename : null; // ✅ Fix missing image
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null; // Get uploaded image path
 
-    // 🛑 Check for missing fields
-    if (!productName || !price || !stock) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    const newStore = await Store.create({
+    const newItem = await Store.create({
       productName,
       price,
       stock,
-      image: image ? `/uploads/${image}` : null,
+      image: imageUrl,
     });
 
-    res.status(201).json(newStore);
+    res.status(201).json(newItem);
   } catch (error) {
-    console.error("❌ Error in /store:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to create store item", details: error.message });
+    console.error("Error adding item:", error);
+    res.status(500).json({ error: "Failed to add item" });
   }
 });
 

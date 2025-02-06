@@ -28,6 +28,7 @@ export default function AddItemForm({ setRefresh }) {
   const handleAddItem = async (e) => {
     e.preventDefault();
     console.log("Image Data:", formData.image);
+    console.log([...formDataObj.entries()]);
 
     try {
       const formDataObj = new FormData();
