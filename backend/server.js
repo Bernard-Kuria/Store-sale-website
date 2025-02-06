@@ -125,6 +125,7 @@ sequelize
 // });
 
 // const upload = multer({ storage });
+// const upload = multer({ storage });
 
 const upload = multer({ dest: "uploads/" });
 
