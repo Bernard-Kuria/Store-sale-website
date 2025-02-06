@@ -107,27 +107,24 @@ sequelize
   .catch((err) => console.error("Error syncing database:", err));
 
 // File upload setup
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     const uploadPath = path.join(__dirname, "uploads");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "uploads");
 
-//     // Create folder if it doesn’t exist
-//     if (!fs.existsSync(uploadPath)) {
-//       console.log("Creating uploads folder...");
-//       fs.mkdirSync(uploadPath, { recursive: true });
-//     }
+    // Create folder if it doesn’t exist
+    if (!fs.existsSync(uploadPath)) {
+      console.log("Creating uploads folder...");
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
 
-//     cb(null, uploadPath);
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
-//   },
-// });
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+  },
+});
 
-// const upload = multer({ storage });
-// const upload = multer({ storage });
-
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ storage });
 
 module.exports = upload;
 
