@@ -1,5 +1,8 @@
 {
   "scripts": {
     "start": "cd backend && npm install && npm start"
+  },
+  "dependencies": {
+    "tinify": "^1.7.1"
   }
 }

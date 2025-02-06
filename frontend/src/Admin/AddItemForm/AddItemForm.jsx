@@ -35,22 +35,15 @@ export default function AddItemForm({ setRefresh }) {
       formDataObj.append("productName", formData.productName);
       formDataObj.append("price", formData.price);
       formDataObj.append("stock", formData.stock);
-
-      if (formData.image && formData.image instanceof File) {
-        formDataObj.append("image", formData.image);
-      } else {
-        console.warn("No valid image selected");
-      }
-
-      console.log("Sending Data:", formDataObj);
-      console.log("API URL:", apiUrl);
+      formDataObj.append("image", formData.image);
 
       const response = await axios.post(`${apiUrl}/store`, formDataObj);
 
       console.log("Item added:", response.data);
+
       alert("Item added successfully!");
-      window.location.reload(); // Refresh the page
-      setFormData({ productName: "", price: "", stock: "", image: null });
+      // window.location.reload(); Refresh the page
+      setFormData({ productName: "", price: "", stock: "", image: null }); // Resetting input fields
       setRefresh((prev) => !prev); // Trigger re-render
     } catch (error) {
       console.error("Error adding item:", error);
