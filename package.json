@@ -3,6 +3,8 @@
     "start": "cd backend && npm install && npm start"
   },
   "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
     "tinify": "^1.7.1"
   }
 }
