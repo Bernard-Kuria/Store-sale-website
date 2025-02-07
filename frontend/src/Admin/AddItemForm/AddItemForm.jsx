@@ -5,6 +5,8 @@ import axios from "axios";
 import "./AddItemForm.css";
 
 export default function AddItemForm({ setRefresh }) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   // Add setRefresh prop
   const [formData, setFormData] = useState({
     productName: "",
@@ -12,39 +14,52 @@ export default function AddItemForm({ setRefresh }) {
     stock: "",
     image: null, // Change to store the file object
   });
+
   const [buttonState, setButtonState] = useState(true);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    console.log("Image Data:", formData.image);
 
-    setFormData({
-      ...formData,
-      [name]: name === "image" ? files[0] : value, // Store file object for image
+    setFormData((prevFormData) => {
+      const updatedFormData = {
+        ...prevFormData,
+        [name]: files ? files[0] : value, // If input is file, store the first file object
+      };
+      return updatedFormData;
     });
+
+    if (name === "image" && files.length > 0) {
+      console.log("Selected Image:", files[0]); // Debugging check
+    }
   };
 
   const handleAddItem = async (e) => {
     e.preventDefault();
-    console.log("Image Data:", formData.image);
+
+    if (!formData.image) {
+      console.error("No image selected before submission!");
+      alert("Please select an image before submitting.");
+      return;
+    }
+
+    const formDataObj = new FormData();
+    formDataObj.append("productName", formData.productName);
+    formDataObj.append("price", formData.price);
+    formDataObj.append("stock", formData.stock);
+    formDataObj.append("image", formData.image);
+
+    console.log("Image Data (Before Upload):", formData.image);
 
     try {
-      const formDataObj = new FormData();
-      console.log([...formDataObj.entries()]);
-      formDataObj.append("productName", formData.productName);
-      formDataObj.append("price", formData.price);
-      formDataObj.append("stock", formData.stock);
-      formDataObj.append("image", formData.image);
-
-      const response = await axios.post(`${apiUrl}/store`, formDataObj);
+      const response = await axios.post(`${apiUrl}/store`, formDataObj, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log("Item added:", response.data);
-
       alert("Item added successfully!");
-      // window.location.reload(); Refresh the page
-      setFormData({ productName: "", price: "", stock: "", image: null }); // Resetting input fields
-      setRefresh((prev) => !prev); // Trigger re-render
+
+      setFormData({ productName: "", price: "", stock: "", image: null });
+      setRefresh((prev) => !prev);
     } catch (error) {
       console.error("Error adding item:", error);
       alert("Failed to add item. Please try again.");
@@ -138,7 +153,16 @@ function AddItem({ formData, handleChange, handleAddItem }) {
       </label>
       <label className="item-image">
         Image URL:
-        <input type="file" name="image" onChange={handleChange} required />
+        <label className="item-image">
+          Image:
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleChange}
+            required
+          />
+        </label>
       </label>
       <button className="submit-button" type="submit">
         Add Item
@@ -152,7 +176,7 @@ AddItem.propTypes = {
     productName: PropTypes.string.isRequired,
     price: PropTypes.string.isRequired,
     stock: PropTypes.string.isRequired,
-    image: PropTypes.object, // File object
+    image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]), // Allow File or string
   }).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleAddItem: PropTypes.func.isRequired,

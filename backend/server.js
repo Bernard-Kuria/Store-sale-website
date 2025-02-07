@@ -111,16 +111,19 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, "uploads");
 
-    // Create folder if it doesn’t exist
+    console.log("Saving file to:", uploadPath);
+
     if (!fs.existsSync(uploadPath)) {
-      console.log("Creating uploads folder...");
+      console.log("Uploads folder does not exist, creating it...");
       fs.mkdirSync(uploadPath, { recursive: true });
     }
 
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    const uniqueName = Date.now() + path.extname(file.originalname);
+    console.log("Generated filename:", uniqueName);
+    cb(null, uniqueName);
   },
 });
 
@@ -193,8 +196,15 @@ app.get("/store", async (req, res) => {
 // Add items to the store
 app.post("/store", upload.single("image"), async (req, res) => {
   try {
+    console.log("File upload middleware executed.");
+    console.log("Received file:", req.file);
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No image file uploaded" });
+    }
+
     const { productName, price, stock } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null; // Get uploaded image path
+    const imageUrl = `/uploads/${req.file.filename}`; // Get uploaded image path
 
     const newItem = await Store.create({
       productName,
