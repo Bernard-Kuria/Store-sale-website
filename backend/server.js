@@ -127,7 +127,9 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage: storage,
+}).single("image");
 
 module.exports = upload;
 
@@ -194,30 +196,31 @@ app.get("/store", async (req, res) => {
 });
 
 // Add items to the store
-app.post("/store", upload.single("image"), async (req, res) => {
-  try {
-    console.log("File upload middleware executed.");
-    console.log("Received file:", req.file);
+app.post("/store", (req, res) => {
+  upload(req, res, function (err) {
+    if (err) {
+      console.error("Multer error:", err);
+      return res.status(500).json({ error: "File upload failed" });
+    }
+    console.log("Received file:", req.file); // Debugging
+    console.log("Received body:", req.body);
 
     if (!req.file) {
-      return res.status(400).json({ error: "No image file uploaded" });
+      return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const { productName, price, stock } = req.body;
-    const imageUrl = `/uploads/${req.file.filename}`; // Get uploaded image path
-
-    const newItem = await Store.create({
-      productName,
-      price,
-      stock,
-      image: imageUrl,
-    });
-
-    res.status(201).json(newItem);
-  } catch (error) {
-    console.error("Error adding item:", error);
-    res.status(500).json({ error: "Failed to add item" });
-  }
+    Store.create({
+      productName: req.body.productName,
+      price: req.body.price,
+      stock: req.body.stock,
+      image: `/uploads/${req.file.filename}`,
+    })
+      .then((item) => res.json(item))
+      .catch((error) => {
+        console.error("Error saving to DB:", error);
+        res.status(500).json({ error: "Database error" });
+      });
+  });
 });
 
 // Delete a shoe by productName
