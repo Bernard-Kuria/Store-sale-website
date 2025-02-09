@@ -129,7 +129,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-}).single("image");
+});
 
 module.exports = upload;
 
@@ -196,31 +196,25 @@ app.get("/store", async (req, res) => {
 });
 
 // Add items to the store
-app.post("/store", (req, res) => {
-  upload(req, res, function (err) {
-    if (err) {
-      console.error("Multer error:", err);
-      return res.status(500).json({ error: "File upload failed" });
-    }
-    console.log("Received file:", req.file); // Debugging
-    console.log("Received body:", req.body);
+app.post("/store", upload.single("image"), (req, res) => {
+  console.log("Received file:", req.file); // Debugging
+  console.log("Received body:", req.body);
 
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
 
-    Store.create({
-      productName: req.body.productName,
-      price: req.body.price,
-      stock: req.body.stock,
-      image: `/uploads/${req.file.filename}`,
-    })
-      .then((item) => res.json(item))
-      .catch((error) => {
-        console.error("Error saving to DB:", error);
-        res.status(500).json({ error: "Database error" });
-      });
-  });
+  Store.create({
+    productName: req.body.productName,
+    price: req.body.price,
+    stock: req.body.stock,
+    image: `/uploads/${req.file.filename}`,
+  })
+    .then((item) => res.json(item))
+    .catch((error) => {
+      console.error("Error saving to DB:", error);
+      res.status(500).json({ error: "Database error" });
+    });
 });
 
 // Delete a shoe by productName
