@@ -35,9 +35,9 @@ const databaseUrl = process.env.DATABASE_URL;
 
 const sequelize = new Sequelize(databaseUrl, {
   dialect: "postgres",
-  dialectOptions: process.env.DATABASE_URL
-    ? { ssl: { require: true, rejectUnauthorized: false } } // Enable SSL only for Railway
-    : {}, // No SSL for local PostgreSQL
+  // dialectOptions: process.env.DATABASE_URL
+  //   ? { ssl: { require: true, rejectUnauthorized: false } } // Enable SSL only for Railway
+  //   : {}, // No SSL for local PostgreSQL
 });
 
 // Test database connection

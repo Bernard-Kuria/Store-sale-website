@@ -6,7 +6,7 @@ export default function ProductDisplay({ productName, price, stock, image }) {
   return (
     <div className={`product ${stock <= 0 ? "soldOut" : ""}`}>
       <div className="image-container">
-        <img className="product-image" src={`${apiUrl}/${image}`} alt="Image" />
+        <img className="product-image" src={`${apiUrl}${image}`} alt="Image" />
       </div>
       <h3 className="shoe-name"> {productName} </h3>
       <h4 className="price"> {price + "ksh"} </h4>
