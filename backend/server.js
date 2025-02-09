@@ -111,20 +111,25 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, "uploads");
 
-    // Create folder if it doesn’t exist
+    console.log("Saving file to:", uploadPath);
+
     if (!fs.existsSync(uploadPath)) {
-      console.log("Creating uploads folder...");
+      console.log("Uploads folder does not exist, creating it...");
       fs.mkdirSync(uploadPath, { recursive: true });
     }
 
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    const uniqueName = Date.now() + path.extname(file.originalname);
+    console.log("Generated filename:", uniqueName);
+    cb(null, uniqueName);
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage: storage,
+}).single("image");
 
 module.exports = upload;
 
@@ -191,34 +196,31 @@ app.get("/store", async (req, res) => {
 });
 
 // Add items to the store
-app.post("/store", upload.single("image"), async (req, res) => {
-  console.log("Received Headers:", req.headers);
-  console.log("Received Body:", req.body);
-  console.log("Received File:", req.file);
+app.post("/store", (req, res) => {
+  upload(req, res, function (err) {
+    if (err) {
+      console.error("Multer error:", err);
+      return res.status(500).json({ error: "File upload failed" });
+    }
+    console.log("Received file:", req.file); // Debugging
+    console.log("Received body:", req.body);
 
-  try {
-    const { productName, price, stock } = req.body;
-    const image = req.file ? req.file.filename : null; // ✅ Fix missing image
-
-    // 🛑 Check for missing fields
-    if (!productName || !price || !stock) {
-      return res.status(400).json({ error: "Missing required fields" });
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const newStore = await Store.create({
-      productName,
-      price,
-      stock,
-      image: image ? `/uploads/${image}` : null,
-    });
-
-    res.status(201).json(newStore);
-  } catch (error) {
-    console.error("❌ Error in /store:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to create store item", details: error.message });
-  }
+    Store.create({
+      productName: req.body.productName,
+      price: req.body.price,
+      stock: req.body.stock,
+      image: `/uploads/${req.file.filename}`,
+    })
+      .then((item) => res.json(item))
+      .catch((error) => {
+        console.error("Error saving to DB:", error);
+        res.status(500).json({ error: "Database error" });
+      });
+  });
 });
 
 // Delete a shoe by productName
