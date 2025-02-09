@@ -15,6 +15,9 @@ console.log("Database URL:", process.env.DATABASE_URL);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const tinify = require("tinify");
+tinify.key = process.env.TINIFY_API_KEY;
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -197,29 +200,44 @@ app.get("/store", async (req, res) => {
 
 // Add items to the store
 app.post("/store", (req, res) => {
-  upload(req, res, function (err) {
+  upload(req, res, async function (err) {
     if (err) {
       console.error("Multer error:", err);
       return res.status(500).json({ error: "File upload failed" });
     }
-    console.log("Received file:", req.file); // Debugging
-    console.log("Received body:", req.body);
 
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    Store.create({
-      productName: req.body.productName,
-      price: req.body.price,
-      stock: req.body.stock,
-      image: `/uploads/${req.file.filename}`,
-    })
-      .then((item) => res.json(item))
-      .catch((error) => {
-        console.error("Error saving to DB:", error);
-        res.status(500).json({ error: "Database error" });
+    const inputPath = req.file.path;
+    const compressedPath = path.join(
+      __dirname,
+      "uploads",
+      "compressed-" + req.file.filename
+    );
+
+    try {
+      await tinify.fromFile(inputPath).toFile(compressedPath);
+
+      // Remove the original uncompressed file
+      fs.unlink(inputPath, (err) => {
+        if (err) console.error("Failed to delete original file:", err);
       });
+
+      // Save the compressed image path to the database
+      const newItem = await Store.create({
+        productName: req.body.productName,
+        price: req.body.price,
+        stock: req.body.stock,
+        image: `/uploads/compressed-${req.file.filename}`,
+      });
+
+      res.json(newItem);
+    } catch (error) {
+      console.error("Tinify error:", error);
+      res.status(500).json({ error: "Image compression failed" });
+    }
   });
 });
 
