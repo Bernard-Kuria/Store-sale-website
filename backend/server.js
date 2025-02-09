@@ -132,6 +132,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png|webp/;
+    const extname = fileTypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    const mimetype = fileTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      return cb(new Error("Only images (JPEG, JPG, PNG, WEBP) are allowed"));
+    }
+  },
 }).single("image");
 
 module.exports = upload;
@@ -202,8 +216,8 @@ app.get("/store", async (req, res) => {
 app.post("/store", (req, res) => {
   upload(req, res, async function (err) {
     if (err) {
-      console.error("Multer error:", err);
-      return res.status(500).json({ error: "File upload failed" });
+      console.error("Multer error:", err.message);
+      return res.status(400).json({ error: err.message });
     }
 
     if (!req.file) {
@@ -220,12 +234,10 @@ app.post("/store", (req, res) => {
     try {
       await tinify.fromFile(inputPath).toFile(compressedPath);
 
-      // Remove the original uncompressed file
       fs.unlink(inputPath, (err) => {
         if (err) console.error("Failed to delete original file:", err);
       });
 
-      // Save the compressed image path to the database
       const newItem = await Store.create({
         productName: req.body.productName,
         price: req.body.price,
