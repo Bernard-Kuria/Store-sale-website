@@ -19,7 +19,7 @@ const tinify = require("tinify");
 tinify.key = process.env.TINIFY_API_KEY;
 
 // Middleware
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "https://store-sale-website.vercel.app/" }));
 app.use(bodyParser.json());
 app.use(compression());
 app.use(express.json());
