@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Header from "../Home/Header/Header.jsx";
 import Footer from "../Home/Footer/Footer.jsx";
 
+import "./Home.css";
+
 // Lazy load ProductDisplay component
 const ProductDisplay = React.lazy(() =>
   import("./ProductDisplay/ProductDisplay.jsx")

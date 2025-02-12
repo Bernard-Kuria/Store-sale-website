@@ -1,5 +1,7 @@
 import PropTypes from "prop-types";
 
+import "./ProductDisplay.css";
+
 export default function ProductDisplay({ productName, price, stock, image }) {
   const apiUrl = import.meta.env.VITE_API_URL; // Get the API URL
 

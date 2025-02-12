@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import logo from "../../assets/logo.jpg";
+import "./Header.css";
 
 export default function Header({ setDisplayScroll, scrollContact }) {
   const [admin, setAdmin] = useState(false);
@@ -61,15 +62,15 @@ export default function Header({ setDisplayScroll, scrollContact }) {
       <div className="sticky-header" style={{ backgroundColor: "black" }}>
         <img className="sticky-logo" src={logo} alt="logo" />
         <h2>KICKS N SOLES</h2>
-        <button className="contact" onClick={() => scrollContact(true)}>
-          CONTACT US
-        </button>
         <button
           className="admin"
           style={{ color: "white" }}
           onClick={() => setAdmin(true)}
         >
           ADMIN
+        </button>
+        <button className="contact" onClick={() => scrollContact(true)}>
+          CONTACT US
         </button>
       </div>
       {admin === true ? (

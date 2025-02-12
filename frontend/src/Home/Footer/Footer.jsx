@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import "./Footer.css";
+
 export default function Footer() {
   const [contact, setContact] = useState({ phone: "", email: "" });
   const apiUrl = import.meta.env.VITE_API_URL;
