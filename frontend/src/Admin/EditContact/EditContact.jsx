@@ -10,7 +10,7 @@ export default function EditContact() {
 
   const updateContact = async () => {
     try {
-      await axios.put(`${apiUrl}/contact`, { phone, email }); // Use dynamic API URL
+      await axios.put(`${apiUrl}/contact`, { phone, email });
       alert("Contact details updated successfully!");
     } catch (error) {
       alert("Failed to update contact details.");
@@ -21,22 +21,24 @@ export default function EditContact() {
   return (
     <div className="contact-edit">
       <div className="edit-contact-title">EDIT YOUR CONTACT DETAILS</div>
-      <h4 className="edit-phone-heading">Edit Phone Number:</h4>
-      <input
-        type="text"
-        placeholder="phone contact"
-        className="new-phone"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-      />
-      <h4 className="edit-email-heading">Edit Email:</h4>
-      <input
-        type="text"
-        placeholder="enter email"
-        className="new-email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <div className="item-field">
+        <label className="edit-phone-heading">Edit Phone Number:</label>
+        <input
+          type="text"
+          placeholder="phone contact"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
+      <div className="item-field">
+        <label className="edit-email-heading">Edit Email:</label>
+        <input
+          type="text"
+          placeholder="enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
       <button className="set" onClick={updateContact}>
         SET
       </button>

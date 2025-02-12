@@ -1,0 +1,7 @@
+.background {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center children horizontally */
+  background-color: black;
+  padding: 20px;
+}

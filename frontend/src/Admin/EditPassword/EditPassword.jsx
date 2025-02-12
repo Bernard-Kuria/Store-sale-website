@@ -6,8 +6,6 @@ export default function EditPassword() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-
   const updatePassword = async () => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -29,24 +27,28 @@ export default function EditPassword() {
   return (
     <div className="password-edit">
       <div className="edit-password-header">EDIT YOUR PASSWORD DETAILS</div>
-      <h4 className="edit-password-title">
-        Please enter your current password:
-      </h4>
-      <input
-        type="text"
-        placeholder="current password"
-        className="old-password"
-        value={currentPassword}
-        onChange={(e) => setCurrentPassword(e.target.value)}
-      />
-      <h4 className="edit-password-title">Enter New Password:</h4>
-      <input
-        type="text"
-        placeholder="new password"
-        className="new-password"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-      />
+      <div className="item-field">
+        <label className="edit-password-title">
+          Please enter your current password:
+        </label>
+        <input
+          type="text"
+          placeholder="current password"
+          className="old-password"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+        />
+      </div>
+      <div className="item-field">
+        <label className="edit-password-title">Enter New Password:</label>
+        <input
+          type="text"
+          placeholder="new password"
+          className="new-password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+      </div>
       <button className="enter" onClick={updatePassword}>
         ENTER
       </button>

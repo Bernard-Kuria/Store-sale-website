@@ -121,8 +121,8 @@ export default function AddItemForm({ setRefresh }) {
 function AddItem({ formData, handleChange, handleAddItem }) {
   return (
     <form onSubmit={handleAddItem}>
-      <label className="item-name">
-        Item Name:
+      <div className="item-field">
+        <label>Item Name:</label>
         <input
           type="text"
           name="productName"
@@ -130,9 +130,9 @@ function AddItem({ formData, handleChange, handleAddItem }) {
           onChange={handleChange}
           required
         />
-      </label>
-      <label className="item-price">
-        Price:
+      </div>
+      <div className="item-field">
+        <label>Price:</label>
         <input
           type="number"
           name="price"
@@ -140,9 +140,9 @@ function AddItem({ formData, handleChange, handleAddItem }) {
           onChange={handleChange}
           required
         />
-      </label>
-      <label className="item-stock">
-        Stock:
+      </div>
+      <div className="item-field">
+        <label>Stock:</label>
         <input
           type="number"
           name="stock"
@@ -150,20 +150,17 @@ function AddItem({ formData, handleChange, handleAddItem }) {
           onChange={handleChange}
           required
         />
-      </label>
-      <label className="item-image">
-        Image URL:
-        <label className="item-image">
-          Image:
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </label>
+      </div>
+      <div className="item-field item-image">
+        <label>Image:</label>
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleChange}
+          required
+        />
+      </div>
       <button className="submit-button" type="submit">
         Add Item
       </button>

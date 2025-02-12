@@ -1,32 +1,70 @@
+/* Container for the contact edit form */
 .contact-edit {
-  width: 400px;
-  height: auto;
+  width: 90%;
+  max-width: 400px; /* Ensures the container doesn't grow too wide on large screens */
   background-color: rgb(95, 95, 95);
   border-radius: 20px;
-  padding: 40px;
-  margin: 0 0 5px 0;
-  margin-bottom: 30px;
+  padding: 20px; /* Adjusted padding for responsiveness */
+  margin: 20px auto; /* Centers the container with vertical spacing */
+  box-sizing: border-box;
 }
 
-.edit-contact-heading {
+/* Title styling */
+.edit-contact-title {
+  font-size: 1.2em;
+  text-align: center;
   margin-bottom: 20px;
+  color: #fff;
 }
 
-.new-phone,
-.new-email,
-.set {
+/* Form field container for spacing */
+.item-field {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input styling */
+.item-field input {
+  width: 100%;
+  padding: 10px;
   border-radius: 10px;
   background-color: rgb(216, 216, 216);
-  width: 80%;
-  height: 50px;
+  border: none;
+  box-sizing: border-box;
+  font-size: 1em;
 }
 
+/* Button styling */
 .set {
-  width: 200px;
-  display: block;
+  width: 100%;
+  max-width: 200px; /* Button will not exceed 200px */
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgb(216, 216, 216);
+  border: none;
+  cursor: pointer;
+  margin: 0 auto; /* Center the button horizontally */
+  font-size: 1em;
 }
 
+/* Hover state for button */
 .set:hover {
   background-color: rgb(97, 97, 97);
+}
+
+/* Responsive adjustments for very small screens */
+@media (max-width: 480px) {
+  .contact-edit {
+    padding: 15px;
+    margin: 10px auto;
+  }
+  .item-field input {
+    padding: 8px;
+    font-size: 0.9em;
+  }
+  .set {
+    height: 45px;
+    font-size: 0.9em;
+  }
 }
