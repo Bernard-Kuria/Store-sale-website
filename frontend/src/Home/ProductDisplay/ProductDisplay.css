@@ -1,5 +1,6 @@
 .product {
   height: auto;
+  max-width: 200px;
   aspect-ratio: 5 / 4;
   display: inline-block;
   margin: 0 5px;
@@ -62,6 +63,10 @@
   }
 }
 @media (max-width: 513px) {
+  .shoe-name {
+    font-size: 0.9em;
+  }
+
   .image-container {
     width: 150px;
     height: 150px;
