@@ -12,6 +12,31 @@ export default function Header({ setDisplayScroll, scrollContact }) {
   const [passwordFetched, setPasswordFetched] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const showStickyHeader = function (entries, observer) {
+      const [entry] = entries;
+
+      if (!entry.isIntersecting) {
+        document.querySelector(".sticky-header").classList.add("sticky");
+        document.querySelector(".sticky-logo").classList.remove("hidden");
+      } else {
+        document.querySelector(".sticky-header").classList.remove("sticky");
+        document.querySelector(".sticky-logo").classList.add("hidden");
+      }
+    };
+
+    const obsOptions = {
+      root: null,
+      threshold: 0,
+    };
+
+    const headerObserver = new IntersectionObserver(
+      showStickyHeader,
+      obsOptions
+    );
+    headerObserver.observe(document.querySelector("header"));
+  }, []);
+
   // Fetch password from the database
   useEffect(() => {
     const fetchPassword = async () => {
@@ -59,8 +84,11 @@ export default function Header({ setDisplayScroll, scrollContact }) {
 
   return (
     <>
-      <div className="sticky-header" style={{ backgroundColor: "black" }}>
-        <img className="sticky-logo" src={logo} alt="logo" />
+      <div
+        className="sticky-header sticky"
+        style={{ backgroundColor: "black" }}
+      >
+        <img className="sticky-logo hidden" src={logo} alt="logo" />
         <h2>KICKS N SOLES</h2>
         <button
           className="admin"
