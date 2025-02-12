@@ -21,6 +21,7 @@
 
 @media (max-width: 650px) {
   .product-display {
-    justify-content: space-around;
+    /* display: block; */
+    justify-content: space-between;
   }
 }
