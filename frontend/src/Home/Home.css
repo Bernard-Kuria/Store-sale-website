@@ -15,6 +15,6 @@
 
 @media (max-width: 650px) {
   .product-display {
-    justify-content: space-around;
+    justify-content: space-between;
   }
 }
