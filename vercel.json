@@ -5,5 +5,10 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "/dist/index.html" }]
+  "routes": [
+    {
+      "src": "/(?!assets/).*",
+      "dest": "/dist/index.html"
+    }
+  ]
 }
