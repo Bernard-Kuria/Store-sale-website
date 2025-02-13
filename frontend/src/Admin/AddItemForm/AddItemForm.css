@@ -1,6 +1,8 @@
 .back-button {
   padding: 20px;
   margin-bottom: 20px;
+  text-align: center;
+  align-items: center;
 }
 
 /* Form container: use a percentage width with a max-width */
