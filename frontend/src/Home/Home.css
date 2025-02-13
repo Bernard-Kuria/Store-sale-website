@@ -3,18 +3,18 @@
 }
 
 .product-display {
-  min-height: 100vh;
-  overflow-y: scroll;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 5px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(180px, 1fr)
+  ); /* Adjusts to fit screen */
+  gap: 10px; /* Space between items */
+  justify-content: center;
   padding: 20px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 513px) {
   .product-display {
-    justify-content: space-between;
+    grid-template-columns: repeat(2, 1fr); /* Ensures 2 products per row */
   }
 }
