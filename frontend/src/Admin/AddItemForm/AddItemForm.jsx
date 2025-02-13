@@ -75,7 +75,6 @@ export default function AddItemForm({ setRefresh }) {
       );
       console.log("Shoe removed:", response.data);
       alert("Shoe removed successfully!");
-      window.location.reload(); // Refresh the page
     } catch (error) {
       console.error("Error removing shoe:", error);
       alert("Failed to remove shoe. Please try again.");
