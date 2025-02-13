@@ -1,8 +1,21 @@
 .back-button {
   padding: 20px;
   margin-bottom: 20px;
-  text-align: center;
-  align-items: center;
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  border-radius: 10px;
+  background-color: rgb(216, 216, 216);
+  width: 100%;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
 }
 
 /* Form container: use a percentage width with a max-width */
