@@ -89,7 +89,7 @@ export default function Header({ setDisplayScroll, scrollContact }) {
         style={{ backgroundColor: "black" }}
       >
         <img className="sticky-logo hidden" src={logo} alt="logo" />
-        <h2>KICKS N SOLES</h2>
+        <h2 className="title">KICKS N SOLES</h2>
         <button
           className="admin"
           style={{ color: "white" }}

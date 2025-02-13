@@ -13,15 +13,8 @@
   padding: 20px;
 }
 
-@media (max-width: 1356px) {
-  .product-display {
-    gap: 20px;
-  }
-}
-
 @media (max-width: 650px) {
   .product-display {
-    /* display: block; */
-    justify-content: space-between;
+    justify-content: space-around;
   }
 }

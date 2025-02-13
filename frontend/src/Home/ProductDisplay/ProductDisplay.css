@@ -30,14 +30,18 @@
 .shoe-name {
   max-width: 180px;
   overflow-wrap: break-word;
+  /* font-family: "Poppins", sans-serif; */
+  font-weight: bold;
 }
 
 .price {
   display: inline-block;
+  font-family: "Poppins", sans-serif;
 }
 
 .stock {
   color: rgb(82, 82, 82);
+  font-family: "Poppins", sans-serif;
 }
 
 @media (max-width: 1356px) {
@@ -63,10 +67,6 @@
   }
 }
 @media (max-width: 513px) {
-  .shoe-name {
-    font-size: 0.9em;
-  }
-
   .image-container {
     width: 150px;
     height: 150px;
