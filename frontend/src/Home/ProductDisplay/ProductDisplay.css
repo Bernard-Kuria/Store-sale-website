@@ -5,6 +5,7 @@
   display: inline-block;
   margin: 0 5px;
   overflow-wrap: normal;
+  cursor: pointer;
 }
 
 .image-container {

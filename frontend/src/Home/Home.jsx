@@ -13,6 +13,11 @@ const ProductDisplay = React.lazy(() =>
 export default function Home({ store }) {
   const [displayScroll, setDisplayScroll] = useState(false);
   const [contactScroll, setContactScroll] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  function showSelectedProduct(id) {
+    setSelectedProduct(id !== selectedProduct ? id : null);
+  }
 
   useEffect(() => {
     document.title = "KICKS N SOLES";
@@ -45,23 +50,85 @@ export default function Home({ store }) {
         scrollContact={setContactScroll}
       />
       <div className="product-display">
-        {/* Suspense is used here to display a fallback while ProductDisplay is loading */}
         <Suspense fallback={<div>Loading products...</div>}>
           {store.map((item) => (
             <ProductDisplay
               key={item.id}
+              id={item.id}
               productName={item.productName}
               price={item.price}
               stock={item.stock}
               image={item.image}
+              showSelectedProduct={showSelectedProduct}
             />
           ))}
         </Suspense>
+        {store
+          .filter((item) => item.id === selectedProduct)
+          .map((item) => (
+            <ProductDetailedView
+              key={item.id}
+              {...item}
+              setSelectedProduct={setSelectedProduct}
+            />
+          ))}
       </div>
       <Footer />
     </div>
   );
 }
+
+function ProductDetailedView({
+  productName,
+  price,
+  stock,
+  image,
+  setSelectedProduct,
+}) {
+  const apiUrl = import.meta.env.VITE_API_URL; // Get the API URL
+
+  function cancelExpandedView() {
+    setSelectedProduct(null);
+  }
+
+  return (
+    <>
+      <div className={`product-extended-view`}>
+        <div className="cancel" onClick={cancelExpandedView}>
+          &times;
+        </div>
+        <div className="image-container-expanded">
+          <i className="fa-solid fa-chevron-left"></i>
+          <img
+            className="product-image-expanded"
+            src={`${apiUrl}${image}`}
+            alt="Image"
+          />
+          <i
+            className="fa-solid fa-chevron-right"
+            style={{ color: "#000000" }}
+          ></i>
+        </div>
+        <h3 className="shoe-name-extended"> {productName} </h3>
+        <h4 className="price-extended"> {price + "ksh"} </h4>
+        {stock <= 0 ? (
+          <h6 className="stock-extended">soldOut</h6>
+        ) : (
+          <h6 className="stock-extended">{`(${stock} in stock)`}</h6>
+        )}
+      </div>
+    </>
+  );
+}
+
+ProductDetailedView.propTypes = {
+  id: PropTypes.number.isRequired,
+  productName: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  stock: PropTypes.number.isRequired,
+  image: PropTypes.string.isRequired,
+  // selectedProduct: PropTypes.number.isRequired,
+};
 
 Home.propTypes = {
   store: PropTypes.arrayOf(

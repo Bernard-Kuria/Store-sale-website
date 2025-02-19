@@ -2,11 +2,21 @@ import PropTypes from "prop-types";
 
 import "./ProductDisplay.css";
 
-export default function ProductDisplay({ productName, price, stock, image }) {
-  const apiUrl = import.meta.env.VITE_API_URL; // Get the API URL
+export default function ProductDisplay({
+  id,
+  productName,
+  price,
+  stock,
+  image,
+  showSelectedProduct,
+}) {
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   return (
-    <div className={`product ${stock <= 0 ? "soldOut" : ""}`}>
+    <div
+      className={`product ${stock <= 0 ? "soldOut" : ""}`}
+      onClick={() => showSelectedProduct(id)}
+    >
       <div className="image-container">
         <img className="product-image" src={`${apiUrl}${image}`} alt="Image" />
       </div>
@@ -22,8 +32,10 @@ export default function ProductDisplay({ productName, price, stock, image }) {
 }
 
 ProductDisplay.propTypes = {
+  id: PropTypes.number.isRequired,
   productName: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   stock: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
+  showSelectedProduct: PropTypes.func.isRequired,
 };
