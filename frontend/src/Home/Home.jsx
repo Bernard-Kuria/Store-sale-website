@@ -5,7 +5,6 @@ import Footer from "../Home/Footer/Footer.jsx";
 
 import "./Home.css";
 
-// Lazy load ProductDisplay component
 const ProductDisplay = React.lazy(() =>
   import("./ProductDisplay/ProductDisplay.jsx")
 );
@@ -127,17 +126,16 @@ ProductDetailedView.propTypes = {
   price: PropTypes.number.isRequired,
   stock: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
-  // selectedProduct: PropTypes.number.isRequired,
 };
 
 Home.propTypes = {
   store: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired, // Assuming each product has a unique ID
+      id: PropTypes.number.isRequired,
       productName: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
       stock: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired, // Assuming image is a string URL
+      image: PropTypes.string.isRequired,
     })
   ).isRequired,
 };
